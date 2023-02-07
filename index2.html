@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">  
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 2 / Components</title>
+</head>
+<style>
+    input{
+        margin: 10px;
+        display: block;
+    }
+</style>
+<body>
+    <div id="app">
+        <!-- components -->
+        <login-form/>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+
+    <script>
+        let app = Vue.createApp({
+
+        })
+        
+        app.component('login-form',{ // ini adalah parent dari component
+            template: ` 
+                <form @submit.prevent="handleSubmit">
+                    <h1>{{ title }}</h1>
+                    <costum-input
+                        v-for="(input, i) in inputs"
+                        :key="i"
+                        v-model="input.value" 
+                        :label="input.label"
+                        :type="input.type"
+
+                    />   
+                     
+                    <button>Log in</button>  
+                </form>
+            `,
+            components:['costum-input'],
+            data(){
+                return{
+                    title: 'Login Form',
+                    inputs: [
+                       {
+                        label: 'Email',
+                        value: '', // yang terpenting adalah v. value, karna jika tidak ada maka ketika user login nilainya akan empty(kosong)
+                        type: 'email'
+                       },
+                       {
+                        label: 'Password',
+                        value: '',
+                        type: 'password'
+                       }
+                    ],  
+                    email: '',
+                    password: '',
+                    emailLabel: 'Email',
+                    passwordLabel: 'Password'
+                }
+            },
+            methods:{
+                handleSubmit(){
+                    console.log(this.inputs[0].value, this.inputs[1].value);
+                }
+            }
+        }),
+
+
+        //  istilahnya halaman file lain
+        app.component('costum-input',{ // ini adalah child components
+            template: `
+                <label>
+                    {{ label }}
+                    <input :type="type" v-model="inputValue"> 
+                </label>
+            `,
+            // props yaitu passing / mengirim data dari component parent ke child
+            props:['label', 'type', 'modelValue'], // menangkap dari nilai bind-label
+
+            // menangkap nilai dari component child ke component parent
+            computed:{
+                inputValue:{ // key 
+                    // mengambil, ketika nilai menangkap nilai get. maka akan menjalankan function get
+                    get(){ 
+                        // setiap user memasukkan nilai maka akan dikirim ke inputValue diatas
+                        return this.modelValue
+                    }, 
+
+                    // dan mengatur, ketika mengatur niai set. maka akan menjalankan function set
+                    set(value){ 
+                        // emit yaitu pertukaran / mengirim data dari compenent child ke parent,
+                        // 'update:modelValue' adalah nama event, dan value adalah argument
+                        this.$emit('update:modelValue', value) 
+                    }
+                }
+            },
+
+            data(){
+                return{
+                    // inputValue: '',
+                }
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+</html>

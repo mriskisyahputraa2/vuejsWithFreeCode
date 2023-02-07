@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 4 / Lifecycle Hooks</title>
+<style>
+    .box{
+        width: 150px;
+        height: 150px;
+        background-color: purple;
+        margin: 10px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <button @click="toggleBox">Toggle Box</button>
+    <test-box v-if="isVisible"/>
+</div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    let app = Vue.createApp({
+        data(){
+            return{
+                isVisible: false // kenapa diberi false?, karna jika diberi true element box yang bernama isVisible akan langsung ditampilakan
+            }
+        },
+        methods: {
+            toggleBox(){
+                this.isVisible = !this.isVisible
+            }
+        },
+        updated(){
+            console.log('updated')
+        }
+    })
+    app.component('test-box', {
+        template: `
+            <div class="box"></div>
+        `,
+        //  ketika tombol button ditekan maka akan dibuat dan di pasang sehingga menampilkan elamen box. tapi ketika ditekan sekali lagi untuk menghilangan makan akan menampilkan unmountend
+        created(){ // dibuat
+            console.log('created');
+        },
+        mounted(){ // di pasang
+            console.log('mounted');
+        },
+        unmounted(){ // di lepas / dihilangkan 
+            console.log('unmounted');
+        }
+        // NOTE : nama function created,mounted.unmounted harus sama tulisannya, jika tidak maka tidak akan tampil 
+    })
+    app.mount('#app')
+</script>
+</body>
+</html>

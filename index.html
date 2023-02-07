@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 1 / Learning.Vuejs</title>
+    <style>
+        body{
+            height: 1000px;
+        }
+        p {
+            color: crimson;
+        }
+
+        .box {
+            background-color: purple;
+            width: 100px;
+            height: 100px;
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+            line-height: 100px;
+        }
+
+        .box.once {
+            background-color: lightgreen;
+        }
+
+        .box.two {
+            background-color: lightcoral;
+        }
+
+        .box.there {
+            background-color: lightblue;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .isVisible {
+            width: 150px;
+            height: 150px;
+            background-color: chartreuse;
+            line-height: 150px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .isVisible1 {
+            background-color: coral;
+        }
+        .isVisible2 {
+            background-color: blue; 
+        }
+        .pr{
+            color: saddlebrown;
+        }
+        input{
+            margin: 10px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <p>Awal Menampilkan Vuejs:</p>
+        {{salam}} {{ greeting }}
+        <p>End Awal Menampilkan Vuejs</p>
+        <hr>
+
+        <!-- start vuejs directive -->
+        <p>Directives:</p>
+        <input @keyup.enter="keyup(greeting, name)" v-model="greeting" v-model="name" /> <br>
+        <div v-show="box" class="box">v-show</div> <!-- v-show-->
+        <div v-if="boxOnce" class="box once">v-if</div>
+        <div v-else-if="boxTwo" class="box two">v-else-if</div>
+        <div v-else="boxThere"   class="box there">v-else</div>
+        <p>End Directives</p>
+        <!-- end vuejs directive -->
+
+        <hr><br>
+
+        <!-- start events & methods -->
+        <p>Events & Methods:</p> 
+        <button v-on:click="isVisible = true">Show Box</button> <!--ketika tombol-nya di click maka akan menampilkan box dari isVisible yang hanya muncul sekali tekan. knp karna events click-nya bernilai true -->
+        <button @click="isVisible1 = !isVisible1">Toggle Box</button> <!--sama aja dengan seperti diatas, perbedaannya ketika diclick berkali-kali maka akan muncul-hilang-muncul-hilang. knp karna events click-nya bernilai !isVisble1 -->
+        <button @click.prevent.stop="toggleBox">Toggle Box with use methods</button>
+        <div v-if="isVisible" class="isVisible">value true</div>
+        <div v-if="isVisible1" class="isVisible isVisible1">!isVisible</div>
+        <div v-if="isVisible2" class="isVisible isVisible2">use with methods</div>
+
+        <button @click="greet">Greet</button><br>
+        <button @click="count++">Klik Me</button>
+        <p class="pr">total {{count}}</p>
+        <p>End Events & Methods</p>
+        <hr><br><br>
+        <!-- end events & methods -->
+
+
+        <!-- start Components -->
+        <!-- end Components -->
+
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script>
+        // let app adalah langkah awal menggunakan vuejs
+        let app = Vue.createApp({ // membuat variabel untuk App
+            data: function () { // membuat data function, dengan return variabel greeting(hello bro).
+                return {
+                    clear: 'bersihkan dulu boyyy',
+                    count: 0,
+                    name: 'Vue.js',
+                    salam: 'Hello Bro,',
+                    greeting: 'gua riski.', // greeting bisa disebut variabel or bisa disebut object
+                    box: true, // this v-show
+                    boxOnce: false, // jika nilai-nya diubah menjadi false maka box-ny tidak akan tampil dan ketika dilihat dari inspect, hasilnya coment v-if
+                    boxTwo: true, // v-else-if
+                    boxThere: false, // else
+                    mgs: 'this v-text', // v-text
+                    rawHtml: 'this v-html directive',
+                    isVisible: false,
+                    isVisible1: false,
+                    isVisible2:false
+                }
+            },
+            methods:{ // ini bisa disebut dengan key(kunci)
+                toggleBox(){  // ini bisa disebut dengan function
+                    this.isVisible2 = !this.isVisible2
+                },
+                greet(event){
+                    alert(`Heloo ${this.name}!`)
+
+                    // if(event){
+                    //     // alert(event.target.tagName)
+                    // }
+                },
+                keyup(greeting, name){
+                    console.log(greeting, name)
+                },
+                onPageDown(){
+                    console.log(this.salam)
+                }
+            }
+        })
+        
+        app.mount('#app') // dan memanggil id which in div for the use. ini disebut dengan vuejs DOM
+    </script>
+
+</body>
+
+</html>
